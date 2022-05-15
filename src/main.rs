@@ -1,4 +1,3 @@
-extern crate reqwest;
 extern crate url;
 
 use futures::future::join_all;
