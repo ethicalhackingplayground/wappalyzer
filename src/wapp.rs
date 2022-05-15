@@ -24,7 +24,7 @@ pub struct Cookie {
 
 #[derive(Debug)]
 pub struct RawData {
-    pub headers: reqwest::header::HeaderMap,
+    pub headers: HashMap<String, String>,
     pub cookies: Vec<Cookie>,
     pub meta_tags: HashMap<String, String>,
     pub script_tags: Vec<String>,
@@ -193,15 +193,12 @@ impl App {
         // check headers
         for (header_to_check, expected_value) in self.headers.iter() {
             if let Some(value) = raw_data.headers.get(header_to_check) {
-                // println!("1. {:?}", value);
-                if let Ok(string_value) = value.to_str() {
-                    if check_text(expected_value, string_value) {
-                        // eprintln!(
-                        //     "||| HEADER ({}) hit on: {}",
-                        //     header_to_check, expected_value
-                        // );
-                        return true; // TODO: temp impletation that returns on any hit
-                    }
+                    if check_text(expected_value, value) {
+                        //eprintln!(
+                        //    "||| HEADER ({}) hit on: {}",
+                        //    header_to_check, expected_value
+                        //);
+                        return true;
                 }
             }
         }
