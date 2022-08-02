@@ -193,6 +193,7 @@ impl App {
         // check headers
         for (header_to_check, expected_value) in self.headers.iter() {
             if let Some(value) = raw_data.headers.get(header_to_check) {
+                println!("{:?} - {:?}", value, expected_value);
                     if check_text(expected_value, value) {
                         //eprintln!(
                         //    "||| HEADER ({}) hit on: {}",
