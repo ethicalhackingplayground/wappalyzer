@@ -192,7 +192,7 @@ impl App {
     pub fn check(&self, raw_data: Arc<RawData>) -> bool {
         // check headers
         for (header_to_check, expected_value) in self.headers.iter() {
-            if let Some(value) = raw_data.headers.get(header_to_check) {
+            if let Some(value) = raw_data.headers.get(header_to_check.to_lowercase().as_str()) {
                 println!("{:?} - {:?}", value, expected_value);
                     if check_text(expected_value, value) {
                         //eprintln!(
