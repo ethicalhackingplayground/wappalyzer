@@ -282,8 +282,8 @@ fn check_text(maybe_regex: &str, text: &str) -> bool {
     let maybe_regex = maybe_regex.split("\\;").collect::<Vec<&str>>()[0];
     match Regex::new(maybe_regex) {
         Ok(re) => {
-            println!("REGEX IS FINE: [{}] - trying on [{}] and got {:?}", maybe_regex, text, re.is_match(text));
-          
+            //println!("REGEX IS FINE: [{}] - trying on [{}] and got {:?}", maybe_regex, text, re.is_match(text));
+       
             re.is_match(text)
         }
         Err(_) => {
