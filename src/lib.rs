@@ -126,7 +126,6 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
         .into_iter()
         .map(|(a, b)| (a.to_lowercase(), b.to_string().replace("\"", "")))
         .collect();
-    println!("{:?}", headers);
      // Revisiting since cookies aren't always detected on first tab.
     let cookies: Vec<wapp::Cookie> = tab
         .navigate_to(url.as_str())
