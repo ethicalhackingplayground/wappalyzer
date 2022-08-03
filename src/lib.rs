@@ -124,7 +124,7 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
         .unwrap()
         .clone()
         .into_iter()
-        .map(|(a, b)| (a, b.to_string()))
+        .map(|(a, b)| (a.to_lowercase(), b.to_string()))
         .collect();
     println!("{:?}", headers);
     // Revisiting since cookies aren't always detected on first tab.
