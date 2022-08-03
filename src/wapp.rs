@@ -194,8 +194,7 @@ impl App {
         for (header_to_check, expected_value) in self.headers.iter() {
            
             if let Some(value) = raw_data.headers.get(header_to_check.to_lowercase().as_str()) {
-                println!("{:?} - {:?}", value, expected_value);
-                    if check_text(expected_value, value.as_str()) {
+                   if check_text(expected_value, value.as_str()) {
                         //eprintln!(
                         //    "||| HEADER ({}) hit on: {}",
                         //    header_to_check, expected_value
