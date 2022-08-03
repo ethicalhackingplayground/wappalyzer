@@ -95,7 +95,7 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
     let responses = Arc::new(Mutex::new(Vec::new()));
     let responses2 = responses.clone();
 
-    tab.enable_response_handling(Box::new(move |response, fetch_body| {
+    tab.register_response_handling(Box::new(move |response, fetch_body| {
         let body = fetch_body().unwrap_or(GetResponseBodyReturnObject {
             body: "".to_string(),
             base_64_encoded: false,
