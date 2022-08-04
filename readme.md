@@ -3,6 +3,8 @@
 
 This crate is a forked version of https://github.com/garretthunyadi/wappalyzer, however instead of using Reqwests to extract response data, the headless_chrome crate is used. This results in more accurate results, since the rules are ran against rendered versions of the web application.
 
+The forked version also implements support for wappalyzer's "implies" feature, in order to minimize false negatives.
+
 Cargo.toml
 ```toml
 [dependencies]
