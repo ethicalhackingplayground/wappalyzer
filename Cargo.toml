@@ -17,7 +17,7 @@ regex = "1"
 tokio = { version = "0.2", features = ["full"] }
 futures = { version = "0.3", features = ["compat"] }
 url = "2.1.1"
-headless_chrome = {git = "https://github.com/atroche/rust-headless-chrome", features = ["fetch"]}
+headless_chrome = {git = "https://github.com/atroche/rust-headless-chrome", rev = "5f2311ad82", features = ["fetch"]}
 # unicode-segmentation = "0.1.2"
 # chrono = { version = "0.4", features = ["serde"] }
 # dns-lookup = "1.0.1"
