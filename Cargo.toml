@@ -2,7 +2,7 @@
 name = "wappalyzer"
 version = "0.1.0"
 authors = ["Iustin Ladunca - Garrett Hunyadi <garrett@pobox.com>"]
-edition = "2018"
+edition = "2021"
 description = "Identifies technologies used on a web page using a headless browser"
 license = "MIT OR Apache-2.0"
 
