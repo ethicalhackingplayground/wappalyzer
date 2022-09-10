@@ -62,16 +62,16 @@ impl From<std::str::Utf8Error> for WappError {
 pub async fn scan(url: Url) -> Analysis {
     let url_str = String::from(url.as_str());
     match fetch(url).await {
-        Ok(raw_data) => {
+        Some(raw_data) => {
             let analysis = wapp::check(raw_data).await;
             Analysis {
                 url: url_str,
                 result: Ok(analysis),
             }
         }
-        Err(err) => Analysis {
+        None => Analysis {
             url: url_str,
-            result: Err(err.to_string()),
+            result: Err("Error".to_string()),
         },
     }
 }
@@ -87,10 +87,10 @@ fn get_html(tab: &Tab) -> Option<String> {
     Some(str.to_owned())
 }
 
-async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
-    let browser = Browser::default().unwrap();
+async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
+    let browser = Browser::default().ok()?;
 
-    let tab = browser.wait_for_initial_tab().unwrap();
+    let tab = browser.wait_for_initial_tab().ok()?;
 
     let responses = Arc::new(Mutex::new(Vec::new()));
     let responses2 = responses.clone();
@@ -103,9 +103,9 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
         responses2.lock().unwrap().push((response, body));
     }))
     .unwrap();
-    tab.navigate_to(url.as_str()).unwrap();
+    tab.navigate_to(url.as_str()).ok()?;
 
-    let rendered_tab = tab.wait_until_navigated().unwrap();
+    let rendered_tab = tab.wait_until_navigated().ok()?;
 
     let html = get_html(rendered_tab).unwrap();
 
@@ -129,9 +129,9 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
      // Revisiting since cookies aren't always detected on first tab.
     let cookies: Vec<wapp::Cookie> = tab
         .navigate_to(url.as_str())
-        .unwrap()
+        .ok()?
         .get_cookies()
-        .unwrap()
+        .ok()?
         .into_iter()
         .map(|c| wapp::Cookie {
             name: c.name,
@@ -142,7 +142,7 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
     let parsed_html = Html::parse_fragment(&html);
     let selector = Selector::parse("meta").unwrap();
     let mut script_tags = vec![];
-    for js in parsed_html.select(&Selector::parse("script").unwrap()) {
+    for js in parsed_html.select(&Selector::parse("script").ok()?) {
         script_tags.push(js.html());
     }
 
@@ -165,5 +165,5 @@ async fn fetch(url: Url) -> Result<Arc<wapp::RawData>, WappError> {
         html,
     });
 
-    Ok(raw_data)
+    Some(raw_data)
 }
