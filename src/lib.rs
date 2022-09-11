@@ -4,7 +4,7 @@ extern crate lazy_static;
 pub mod wapp;
 
 use headless_chrome::protocol::cdp::Network::GetResponseBodyReturnObject;
-use headless_chrome::{Browser, Tab};
+use headless_chrome::{LaunchOptions, Browser, Tab};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
