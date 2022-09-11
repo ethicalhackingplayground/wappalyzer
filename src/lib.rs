@@ -88,7 +88,14 @@ fn get_html(tab: &Tab) -> Option<String> {
 }
 
 async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
-    let browser = Browser::default().ok()?;
+        let browser = Browser::new(
+        LaunchOptions::default_builder()
+            .port(Some(8242))
+            .sandbox(false)
+            .build()
+            .unwrap(),
+    )
+        .unwrap();
 
     let tab = browser.wait_for_initial_tab().ok()?;
 
