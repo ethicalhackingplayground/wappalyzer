@@ -268,7 +268,7 @@ struct Category {
 fn check_text(maybe_regex: &str, text: &str) -> bool {
     // TODO: strignoring version stuff for now.
     // TODO: Compile regex's in the initialization area.
-    let maybe_regex = String::from(maybe_regex);
+    let maybe_regex = format!("(?i){}", maybe_regex);
     let maybe_regex = maybe_regex.split("\\;").collect::<Vec<&str>>()[0];
     match Regex::new(maybe_regex) {
         Ok(re) => {
