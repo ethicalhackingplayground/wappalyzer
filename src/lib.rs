@@ -3,11 +3,11 @@ extern crate lazy_static;
 
 pub mod wapp;
 
-use headless_chrome::protocol::cdp::Network::GetResponseBodyReturnObject;
-use headless_chrome::{LaunchOptions, Browser, Tab};
+use headless_chrome::protocol::cdp::Network::{GetCookies, GetResponseBodyReturnObject};
+use headless_chrome::{Browser, LaunchOptions, Tab};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt;
 use std::sync::{Arc, Mutex};
 use url::Url;
@@ -16,7 +16,7 @@ use wapp::{RawData, Tech};
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Analysis {
     pub url: String,
-    pub result: Result<Vec<Tech>, String>,
+    pub result: Result<HashSet<Tech>, String>,
 }
 
 /// Possible Errors in the domain_info lib
@@ -63,7 +63,7 @@ pub async fn scan(url: Url) -> Analysis {
     let url_str = String::from(url.as_str());
     match fetch(url).await {
         Some(raw_data) => {
-            let analysis = wapp::check(raw_data).await;
+            let analysis : HashSet<Tech> = wapp::check(raw_data).await.into_iter().collect();
             Analysis {
                 url: url_str,
                 result: Ok(analysis),
@@ -88,7 +88,7 @@ fn get_html(tab: &Tab) -> Option<String> {
 }
 
 async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
-        let browser = Browser::new(
+    let browser = Browser::new(
         LaunchOptions::default_builder()
             .port(Some(8242))
             .sandbox(false)
@@ -109,7 +109,7 @@ async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
         });
         responses2.lock().unwrap().push((response, body));
     }))
-    .unwrap();
+        .unwrap();
     tab.navigate_to(url.as_str()).ok()?;
 
     let rendered_tab = tab.wait_until_navigated().ok()?;
@@ -133,7 +133,7 @@ async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
         .into_iter()
         .map(|(a, b)| (a.to_lowercase(), b.to_string().replace("\"", "")))
         .collect();
-     // Revisiting since cookies aren't always detected on first tab.
+    // Revisiting since cookies aren't always detected on first tab.
     let cookies: Vec<wapp::Cookie> = tab
         .navigate_to(url.as_str())
         .ok()?
@@ -145,6 +145,7 @@ async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
             value: c.value,
         })
         .collect();
+    //let cookies: Vec<wapp::Cookie> = vec![wapp::Cookie {name: "a".to_string(), value: "value".to_string()}];
 
     let parsed_html = Html::parse_fragment(&html);
     let selector = Selector::parse("meta").unwrap();
@@ -158,7 +159,7 @@ async fn fetch(url: Url) -> Option<Arc<wapp::RawData>> {
     let mut meta_tags = HashMap::new();
     for meta in parsed_html.select(&selector) {
         if let (Some(name), Some(content)) =
-            (meta.value().attr("name"), meta.value().attr("content"))
+        (meta.value().attr("name"), meta.value().attr("content"))
         {
             // eprintln!("META {} -> {}", name, content);
             meta_tags.insert(String::from(name), String::from(content));
