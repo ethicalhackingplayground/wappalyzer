@@ -62,7 +62,7 @@ lazy_static! {
 }
 
 /// A technology that is found on a page
-#[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Hash,  Clone, Serialize, Deserialize)]
 pub struct Tech {
     pub category: String,
     pub name: String,
@@ -183,7 +183,7 @@ impl App {
     pub fn check(&self, raw_data: Arc<RawData>) -> bool {
         // check headers
         for (header_to_check, expected_value) in self.headers.iter() {
-           
+
             if let Some(value) = raw_data.headers.get(header_to_check.to_lowercase().as_str()) {
                    if check_text(expected_value, value.as_str()) {
                         //eprintln!(
@@ -273,13 +273,13 @@ fn check_text(maybe_regex: &str, text: &str) -> bool {
     match Regex::new(maybe_regex) {
         Ok(re) => {
             //println!("REGEX IS FINE: [{}] - trying on [{}] and got {:?}", maybe_regex, text, re.is_match(text));
-       
+
             re.is_match(text)
         }
         Err(_) => {
-            // eprintln!("invalid regex in app.json '{}': {}", maybe_regex, err);
-            // panic!("invalid regex in app.json '{}': {}", maybe_regex, err);
-            false
+             //eprintln!("invalid regex in app.json '{}': {}", maybe_regex, err);
+             //panic!("invalid regex in app.json '{}': {}", maybe_regex, err);
+             false
         }
     }
 }
