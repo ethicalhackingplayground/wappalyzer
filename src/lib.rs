@@ -59,7 +59,7 @@ impl From<std::str::Utf8Error> for WappError {
     }
 }
 
-pub async fn scan(url: Url, browser: Browser) -> Analysis {
+pub async fn scan(url: Url, browser: &Browser) -> Analysis {
     let url_str = String::from(url.as_str());
     match fetch(url,browser).await {
         Some(raw_data) => {
@@ -87,7 +87,7 @@ fn get_html(tab: &Tab) -> Option<String> {
     Some(str.to_owned())
 }
 
-async fn fetch(url: Url, browser: Browser) -> Option<Arc<wapp::RawData>> {
+async fn fetch(url: Url, browser: &Browser) -> Option<Arc<wapp::RawData>> {
 
     let tab = browser.wait_for_initial_tab().ok()?;
 
