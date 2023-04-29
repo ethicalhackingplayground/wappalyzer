@@ -59,7 +59,7 @@ impl From<std::str::Utf8Error> for WappError {
     }
 }
 
-pub async fn scan(url: Url) -> Analysis {
+pub async fn scan(url: Url, browser: Browser) -> Analysis {
     let url_str = String::from(url.as_str());
     match fetch(url).await {
         Some(raw_data) => {
