@@ -61,7 +61,7 @@ impl From<std::str::Utf8Error> for WappError {
 
 pub async fn scan(url: Url, browser: Browser) -> Analysis {
     let url_str = String::from(url.as_str());
-    match fetch(url).await {
+    match fetch(url,browser).await {
         Some(raw_data) => {
             let analysis : HashSet<Tech> = wapp::check(raw_data).await.into_iter().collect();
             Analysis {
