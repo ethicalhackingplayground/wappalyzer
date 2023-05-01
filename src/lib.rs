@@ -58,6 +58,19 @@ impl From<std::str::Utf8Error> for WappError {
         WappError::Other(err.to_string())
     }
 }
+   
+// creates a new browser instance and returns it
+pub fn new_browser() -> Browser {
+    let browser = Browser::new(
+        LaunchOptions::default_builder()
+            .port(Some(8242))
+            .sandbox(false)
+            .build()
+            .unwrap(),
+    )
+    .unwrap();
+    return browser;
+}
 
 pub async fn scan(url: Url, browser: &Browser) -> Analysis {
     let url_str = String::from(url.as_str());
