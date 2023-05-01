@@ -17,6 +17,6 @@ regex = "1"
 tokio = { version = "1.21.0", features = ["full"] }
 futures = { version = "0.3", features = ["compat"] }
 url = "2.1.1"
-headless_chrome = {git = "https://github.com/ethicalhackingplayground/rust-headless-chrome", rev = "3c7488b", features = ["fetch"]}
+headless_chrome = {git = "https://github.com/ethicalhackingplayground/rust-headless-chrome", rev = "3c7488b5", features = ["fetch"]}
 scraper = "0.10.1"
 openssl = { version = "0.10.40", features = ["vendored"] }
