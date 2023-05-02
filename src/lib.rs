@@ -60,10 +60,10 @@ impl From<std::str::Utf8Error> for WappError {
 }
    
 // creates a new browser instance and returns it
-pub fn new_browser() -> Browser {
+pub fn new_browser(port: u16) -> Browser {
     let browser = Browser::new(
         LaunchOptions::default_builder()
-            .port(Some(8242))
+            .port(Some(port))
             .sandbox(false)
             .build()
             .unwrap(),
