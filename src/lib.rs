@@ -114,8 +114,8 @@ async fn fetch(url: Url, browser: &Browser) -> Option<Arc<wapp::RawData>> {
         });
         responses2.lock().unwrap().push((response, body));
     })) {
-        Some(response) => response,
-        None => return None,
+        Ok(response) => response,
+        Err(_) =>  exit(1),
     };
     tab.navigate_to(url.as_str()).ok()?;
 
