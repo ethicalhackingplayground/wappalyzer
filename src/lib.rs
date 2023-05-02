@@ -107,14 +107,16 @@ async fn fetch(url: Url, browser: &Browser) -> Option<Arc<wapp::RawData>> {
     let responses = Arc::new(Mutex::new(Vec::new()));
     let responses2 = responses.clone();
 
-    tab.enable_response_handling(Box::new(move |response, fetch_body| {
+    let _ = match tab.enable_response_handling(Box::new(move |response, fetch_body| {
         let body = fetch_body().unwrap_or(GetResponseBodyReturnObject {
             body: "".to_string(),
             base_64_encoded: false,
         });
         responses2.lock().unwrap().push((response, body));
-    }))
-        .unwrap();
+    })) {
+        Some(response) => response,
+        None => return None,
+    };
     tab.navigate_to(url.as_str()).ok()?;
 
     let rendered_tab = tab.wait_until_navigated().ok()?;
