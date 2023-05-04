@@ -63,7 +63,6 @@ impl From<std::str::Utf8Error> for WappError {
 pub fn new_browser(port: u16) -> Browser {
     let browser = Browser::new(
         LaunchOptions::default_builder()
-            .port(Some(port))
             .sandbox(false)
             .build()
             .unwrap(),
