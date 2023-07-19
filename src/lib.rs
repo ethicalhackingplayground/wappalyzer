@@ -70,7 +70,7 @@ pub fn new_browser(port: u16) -> Browser {
             .port(Some(port))
             .idle_browser_timeout(Duration::from_secs(9000))
             .window_size(Some((1920, 1080)))
-            .headless(false)
+            .headless(true)
             .build()
             .unwrap(),
     )
