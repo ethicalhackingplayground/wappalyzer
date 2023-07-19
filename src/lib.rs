@@ -75,7 +75,6 @@ pub fn new_browser(port: u16) -> Browser {
             .unwrap(),
     )
     .unwrap();
-    let _ = browser.wait_for_initial_tab().unwrap();
     return browser;
 }
 
@@ -108,6 +107,8 @@ fn get_html(tab: &Tab) -> Option<String> {
 }
 
 async fn fetch(url: Url, browser: &Browser) -> Option<Arc<wapp::RawData>> {
+    let tab = browser.new_tab().ok()?;
+    tab.set_user_agent("Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Mobile Safari/537.36", None, None).unwrap();
 
     let tab = browser.wait_for_initial_tab().ok()?;
 
