@@ -3,7 +3,7 @@ extern crate lazy_static;
 
 pub mod wapp;
 
-use headless_chrome::protocol::cdp::Network::{GetCookies, GetResponseBodyReturnObject};
+use headless_chrome::protocol::cdp::Network::GetResponseBodyReturnObject;
 use headless_chrome::{Browser, LaunchOptions, Tab};
 use scraper::{Html, Selector};
 use serde::{Deserialize, Serialize};
@@ -63,7 +63,7 @@ impl From<std::str::Utf8Error> for WappError {
 pub fn new_browser(port: u16) -> Browser {
     let browser = Browser::new(
         LaunchOptions::default_builder()
-            .sandbox(true)
+            .sandbox(false)
             .port(Some(port))
             .build()
             .unwrap(),
