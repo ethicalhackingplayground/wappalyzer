@@ -67,10 +67,13 @@ pub fn new_browser(port: u16) -> Browser {
             .sandbox(false)
             .path(Some(PathBuf::from("/usr/bin/chromium")))
             .port(Some(port))
+            .window_size(Some((1920, 1080)))
+            .headless(true)
             .build()
             .unwrap(),
     )
     .unwrap();
+    let _ = browser.wait_for_initial_tab().unwrap();
     return browser;
 }
 
