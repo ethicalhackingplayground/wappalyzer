@@ -12,6 +12,7 @@ use std::fmt;
 use std::sync::{Arc, Mutex};
 use url::Url;
 use wapp::{RawData, Tech};
+use std::path::PathBuf;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Analysis {
@@ -64,6 +65,7 @@ pub fn new_browser(port: u16) -> Browser {
     let browser = Browser::new(
         LaunchOptions::default_builder()
             .sandbox(false)
+            .path(Some(PathBuf::from("/usr/bin/chromium")))
             .port(Some(port))
             .build()
             .unwrap(),
