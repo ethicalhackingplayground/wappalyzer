@@ -13,6 +13,7 @@ use std::sync::{Arc, Mutex};
 use url::Url;
 use wapp::{RawData, Tech};
 use std::path::PathBuf;
+use std::time::Duration;
 
 #[derive(Debug, PartialEq, Clone, Serialize, Deserialize)]
 pub struct Analysis {
@@ -67,6 +68,7 @@ pub fn new_browser(port: u16) -> Browser {
             .sandbox(false)
             .path(Some(PathBuf::from("/usr/bin/chromium")))
             .port(Some(port))
+            .idle_browser_timeout(Duration::from_secs(9000))
             .window_size(Some((1920, 1080)))
             .headless(true)
             .build()
